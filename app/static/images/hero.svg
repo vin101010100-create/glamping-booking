@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Природа Якутии">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b93ab"/>
+      <stop offset="55%" stop-color="#d7c4a8"/>
+      <stop offset="100%" stop-color="#f3d39b"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe6b5" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#ffd48b" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffca7a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="river" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8cfa2"/>
+      <stop offset="100%" stop-color="#315c56"/>
+    </linearGradient>
+    <linearGradient id="fadeBottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#071b14" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#071b14" stop-opacity="0.55"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <circle cx="1420" cy="300" r="330" fill="url(#sunGlow)"/>
+  <circle cx="1420" cy="300" r="92" fill="#ffe1a8" opacity="0.95"/>
+  <path d="M0 720 L260 390 L500 650 L760 330 L1020 650 L1260 400 L1530 690 L1720 470 L1920 700 L1920 1080 L0 1080 Z" fill="#6f8f88" opacity="0.5"/>
+  <path d="M0 790 L220 540 L430 740 L680 470 L920 730 L1160 520 L1420 760 L1650 560 L1920 780 L1920 1080 L0 1080 Z" fill="#416f62" opacity="0.7"/>
+  <rect y="650" width="1920" height="220" fill="#ffffff" opacity="0.16"/>
+  <path d="M0 760 C280 700 480 780 760 740 C1080 694 1300 770 1560 730 C1720 706 1860 730 1920 720 L1920 1080 L0 1080 Z" fill="#224c3d"/>
+  <path d="M760 760 C900 810 940 920 1010 1080 L1230 1080 C1160 910 1100 800 1030 750 C950 720 840 730 760 760 Z" fill="url(#river)" opacity="0.9"/>
+  <path d="M0 850 C240 810 380 880 580 850 C740 825 840 870 900 900 L900 1080 L0 1080 Z" fill="#163d2f"/>
+  <path d="M1300 830 C1500 790 1700 840 1920 800 L1920 1080 L1300 1080 Z" fill="#12382b"/>
+  <g fill="#0d2b20" opacity="0.9">
+    <g transform="translate(120 700) scale(1.6)"><path d="M0 0 L40 78 L12 78 L52 150 L-52 150 L-12 78 L-40 78 Z"/><rect x="-5" y="142" width="10" height="30" fill="#2a2118"/></g>
+    <g transform="translate(260 760) scale(1.1)"><path d="M0 0 L40 78 L12 78 L52 150 L-52 150 L-12 78 L-40 78 Z"/><rect x="-5" y="142" width="10" height="30" fill="#2a2118"/></g>
+    <g transform="translate(1670 720) scale(1.5)"><path d="M0 0 L40 78 L12 78 L52 150 L-52 150 L-12 78 L-40 78 Z"/><rect x="-5" y="142" width="10" height="30" fill="#2a2118"/></g>
+    <g transform="translate(1810 790) scale(1.0)"><path d="M0 0 L40 78 L12 78 L52 150 L-52 150 L-12 78 L-40 78 Z"/><rect x="-5" y="142" width="10" height="30" fill="#2a2118"/></g>
+    <g transform="translate(1520 800) scale(0.8)"><path d="M0 0 L40 78 L12 78 L52 150 L-52 150 L-12 78 L-40 78 Z"/><rect x="-5" y="142" width="10" height="30" fill="#2a2118"/></g>
+  </g>
+  <g transform="translate(1140 760) scale(1.0)" opacity="0.95">
+    <path d="M0 120 L70 0 L140 120 Z" fill="#f0dfc2"/>
+    <path d="M70 0 L140 120 L95 120 Z" fill="#d4bb92"/>
+    <path d="M53 120 L70 66 L87 120 Z" fill="#2c3a30"/>
+    <path d="M0 120 L70 0" stroke="#7f6d51" stroke-width="3"/>
+  </g>
+  <rect y="800" width="1920" height="280" fill="url(#fadeBottom)"/>
+</svg>

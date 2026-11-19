@@ -1,0 +1,28 @@
+<article class="accommodation-card h-100">
+    <a class="card-image-link" href="{{ url_for('main.accommodation', accommodation_id=acc.id) }}">
+        <div class="card-image">
+            <img src="{{ acc.cover_url }}" alt="{{ acc.name }}" loading="lazy">
+            <span class="type-badge">{{ acc.type }}</span>
+            <span class="capacity-badge"><i class="bi bi-people me-1"></i>до {{ acc.capacity }}</span>
+        </div>
+    </a>
+    <div class="card-content">
+        <p class="location-line">
+            <i class="bi bi-geo-alt"></i>{{ acc.location }}
+        </p>
+        <h3 class="card-title">
+            <a href="{{ url_for('main.accommodation', accommodation_id=acc.id) }}">{{ acc.name }}</a>
+        </h3>
+        <p class="card-description">{{ acc.description|truncate(96, true, '…') }}</p>
+        <div class="card-footer-row">
+            <div>
+                <span class="price">{{ acc.price|rub }}</span>
+                <span class="price-unit">/ ночь</span>
+            </div>
+            <a class="btn btn-sm btn-outline-brand"
+               href="{{ url_for('main.accommodation', accommodation_id=acc.id) }}">
+                Подробнее <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</article>

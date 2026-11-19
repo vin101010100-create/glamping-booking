@@ -1,0 +1,91 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Бронирования — Саха Глэмпинг{% endblock %}
+{% block admin_title %}Бронирования{% endblock %}
+{% block admin_subtitle %}Все заявки клиентов и управление статусами{% endblock %}
+
+{% block admin_content %}
+<div class="panel">
+    <div class="status-filters mb-3">
+        <a class="status-chip {% if not current_status %}active{% endif %}"
+           href="{{ url_for('admin.bookings') }}">Все</a>
+        {% for key, label in BOOKING_STATUSES.items() %}
+        <a class="status-chip {% if current_status == key %}active{% endif %}"
+           href="{{ url_for('admin.bookings', status=key) }}">{{ label }}</a>
+        {% endfor %}
+    </div>
+
+    {% if bookings %}
+    <div class="table-responsive">
+        <table class="table admin-table align-middle">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Клиент</th>
+                    <th>Объект</th>
+                    <th>Даты проживания</th>
+                    <th>Сумма</th>
+                    <th>Создано</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td class="text-muted">#{{ booking.id }}</td>
+                    <td>
+                        <div class="fw-semibold">{{ booking.user.name }}</div>
+                        <div class="small text-muted">{{ booking.user.email }}</div>
+                        {% if booking.user.phone %}
+                        <div class="small text-muted">{{ booking.user.phone }}</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('main.accommodation', accommodation_id=booking.accommodation.id) }}">
+                            {{ booking.accommodation.name }}
+                        </a>
+                        <div class="small text-muted">{{ booking.accommodation.location }}</div>
+                    </td>
+                    <td class="small">
+                        {{ booking.check_in|date_ru }} — {{ booking.check_out|date_ru }}<br>
+                        <span class="text-muted">{{ booking.nights }}
+                            {{ booking.nights|plural_ru('ночь', 'ночи', 'ночей') }}</span>
+                    </td>
+                    <td class="fw-semibold text-nowrap">{{ booking.total_price|rub }}</td>
+                    <td class="small text-muted text-nowrap">{{ booking.created_at.strftime('%d.%m.%Y') }}</td>
+                    <td>
+                        <form class="status-form" method="post"
+                              action="{{ url_for('admin.update_booking_status', booking_id=booking.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="return_status" value="{{ current_status }}">
+                            <select class="form-select form-select-sm" name="status" aria-label="Статус бронирования">
+                                {% for key, label in BOOKING_STATUSES.items() %}
+                                <option value="{{ key }}" {% if booking.status == key %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-sm btn-outline-brand" type="submit" title="Сохранить статус">
+                                <i class="bi bi-check2"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include "_pagination.html" %}
+    {% else %}
+    <div class="empty-state empty-state-small">
+        <i class="bi bi-journal-x"></i>
+        <h3>Бронирований нет</h3>
+        <p>{% if current_status %}В этом статусе пока нет заявок.{% else %}Новые заявки появятся здесь.{% endif %}</p>
+        {% if current_status %}
+        <a class="btn btn-outline-brand" href="{{ url_for('admin.bookings') }}">Показать все</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}{{ acc.name }} — Саха Глэмпинг{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-compact">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('main.catalog') }}">Каталог</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ acc.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="section pt-0">
+    <div class="container">
+        {% if not acc.is_active %}
+        <div class="alert alert-warning">
+            <i class="bi bi-eye-slash me-2"></i>Объект скрыт из каталога. Вы видите эту страницу как администратор.
+        </div>
+        {% endif %}
+
+        <div class="row g-4 g-lg-5">
+            <div class="col-lg-8">
+                <div id="objectGallery" class="carousel slide gallery-card" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in acc.gallery_urls %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                            <img src="{{ image }}" class="d-block w-100" alt="{{ acc.name }} — фото {{ loop.index }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if acc.gallery_urls|length > 1 %}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#objectGallery" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Предыдущее фото</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#objectGallery" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Следующее фото</span>
+                    </button>
+                    <div class="carousel-indicators">
+                        {% for image in acc.gallery_urls %}
+                        <button type="button" data-bs-target="#objectGallery" data-bs-slide-to="{{ loop.index0 }}"
+                                {% if loop.first %}class="active" aria-current="true"{% endif %}
+                                aria-label="Фото {{ loop.index }}"></button>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="detail-card mt-4">
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
+                        <div>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="type-tag">{{ acc.type }}</span>
+                                <span class="type-tag type-tag-light"><i class="bi bi-people me-1"></i>до {{ acc.capacity }} гостей</span>
+                            </div>
+                            <h1 class="detail-title">{{ acc.name }}</h1>
+                            <p class="location-line mb-0">
+                                <i class="bi bi-geo-alt"></i>{{ acc.location }}
+                            </p>
+                        </div>
+                        <div class="detail-price">
+                            {{ acc.price|rub }}<span>/ ночь</span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h2 class="detail-subtitle">Об объекте</h2>
+                    <p class="detail-description">{{ acc.description }}</p>
+
+                    {% if acc.amenities_list %}
+                    <h2 class="detail-subtitle mt-4">Удобства и услуги</h2>
+                    <div class="amenities-grid">
+                        {% for amenity in acc.amenities_list %}
+                        <div class="amenity">
+                            <i class="bi bi-check2-circle"></i>{{ amenity }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <h2 class="detail-subtitle mt-4">Правила проживания</h2>
+                    <div class="rules-grid">
+                        <div class="rule">
+                            <i class="bi bi-clock-history"></i>
+                            <div>
+                                <strong>Заезд и выезд</strong>
+                                <span>Заезд с 14:00, выезд до 12:00</span>
+                            </div>
+                        </div>
+                        <div class="rule">
+                            <i class="bi bi-x-circle"></i>
+                            <div>
+                                <strong>Отмена</strong>
+                                <span>Бесплатная отмена до даты заезда</span>
+                            </div>
+                        </div>
+                        <div class="rule">
+                            <i class="bi bi-credit-card"></i>
+                            <div>
+                                <strong>Оплата</strong>
+                                <span>На месте или по договорённости с объектом</span>
+                            </div>
+                        </div>
+                        <div class="rule">
+                            <i class="bi bi-shield-check"></i>
+                            <div>
+                                <strong>Подтверждение</strong>
+                                <span>Администратор подтверждает бронь в течение дня</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <aside class="booking-card">
+                    <div class="booking-price-row">
+                        <div>
+                            <span class="booking-price">{{ acc.price|rub }}</span>
+                            <span class="price-unit">/ ночь</span>
+                        </div>
+                        <span class="type-tag type-tag-light"><i class="bi bi-people me-1"></i>{{ acc.capacity }}</span>
+                    </div>
+
+                    {% if not acc.is_active %}
+                    <div class="alert alert-warning small mt-3 mb-0">
+                        Объект временно скрыт, бронирование недоступно.
+                    </div>
+                    {% elif current_user.is_authenticated %}
+                    <form method="post" action="{{ url_for('booking.create_booking', accommodation_id=acc.id) }}"
+                          class="mt-3" data-booking-form data-price="{{ acc.price }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label" for="checkIn">Дата заезда</label>
+                                <input class="form-control" type="date" id="checkIn" name="check_in"
+                                       min="{{ today.isoformat() }}" required
+                                       value="{{ request.args.get('check_in', '') }}">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="checkOut">Дата выезда</label>
+                                <input class="form-control" type="date" id="checkOut" name="check_out"
+                                       min="{{ today.isoformat() }}" required
+                                       value="{{ request.args.get('check_out', '') }}">
+                            </div>
+                        </div>
+
+                        <div class="booking-total d-none" id="bookingTotal">
+                            <span id="bookingTotalLabel">Итого</span>
+                            <strong id="bookingTotalValue">0 ₽</strong>
+                        </div>
+
+                        <button class="btn btn-brand btn-lg w-100 mt-3" type="submit">
+                            Забронировать
+                        </button>
+                        <p class="booking-note">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Бронирование без предоплаты. Статус заявки появится в личном кабинете.
+                        </p>
+                    </form>
+                    {% else %}
+                    <div class="mt-3">
+                        <p class="text-muted">Войдите в аккаунт, чтобы выбрать даты и отправить заявку.</p>
+                        <a class="btn btn-brand btn-lg w-100"
+                           href="{{ url_for('auth.login', next=request.path) }}">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Войти и забронировать
+                        </a>
+                        <a class="btn btn-outline-secondary w-100 mt-2"
+                           href="{{ url_for('auth.register') }}">Создать аккаунт</a>
+                    </div>
+                    {% endif %}
+
+                    {% if acc.is_active %}
+                    <div class="booking-guarantees">
+                        <div><i class="bi bi-check2-circle"></i>Свободные даты проверяются автоматически</div>
+                        <div><i class="bi bi-check2-circle"></i>Отмена — в личном кабинете</div>
+                        <div><i class="bi bi-check2-circle"></i>Помощь: +79147941406</div>
+                    </div>
+                    {% endif %}
+                </aside>
+            </div>
+        </div>
+
+        {% if related %}
+        <div class="mt-5 pt-2">
+            <span class="eyebrow">Рядом и похоже</span>
+            <h2 class="section-title mb-4">Другие варианты</h2>
+            <div class="row g-4">
+                {% for acc in related %}
+                <div class="col-md-6 col-lg-4">
+                    {% include "_accommodation_card.html" %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

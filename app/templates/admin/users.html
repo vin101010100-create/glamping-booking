@@ -1,0 +1,71 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Пользователи — Саха Глэмпинг{% endblock %}
+{% block admin_title %}Пользователи{% endblock %}
+{% block admin_subtitle %}Зарегистрированные клиенты и администраторы сервиса{% endblock %}
+
+{% block admin_content %}
+<div class="panel">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <form class="admin-search" method="get" action="{{ url_for('admin.users') }}">
+            <i class="bi bi-search"></i>
+            <input class="form-control" type="search" name="q" value="{{ q }}"
+                   placeholder="Имя или электронная почта">
+            <button class="btn btn-outline-brand" type="submit">Найти</button>
+            {% if q %}
+            <a class="btn btn-outline-secondary" href="{{ url_for('admin.users') }}">Сбросить</a>
+            {% endif %}
+        </form>
+        <span class="text-muted small">Всего: {{ pagination.total }}</span>
+    </div>
+
+    {% if users %}
+    <div class="table-responsive">
+        <table class="table admin-table align-middle">
+            <thead>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Телефон</th>
+                    <th>Роль</th>
+                    <th>Бронирований</th>
+                    <th>Регистрация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        <div class="table-user">
+                            <span class="avatar avatar-sm">{{ user.name[0]|upper }}</span>
+                            <div>
+                                <div class="fw-semibold">{{ user.name }} {% if user.id == current_user.id %}<span class="text-muted small">(вы)</span>{% endif %}</div>
+                                <div class="small text-muted">{{ user.email }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ user.phone or '—' }}</td>
+                    <td>
+                        {% if user.is_admin %}
+                        <span class="role-badge role-badge-admin">Администратор</span>
+                        {% else %}
+                        <span class="role-badge">Клиент</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.bookings|length }}</td>
+                    <td class="small text-muted">{{ user.created_at.strftime('%d.%m.%Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include "_pagination.html" %}
+    {% else %}
+    <div class="empty-state empty-state-small">
+        <i class="bi bi-person-x"></i>
+        <h3>Пользователи не найдены</h3>
+        <p>Попробуйте изменить поисковый запрос.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

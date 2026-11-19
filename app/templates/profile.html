@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет — Саха Глэмпинг{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-compact">
+    <div class="container">
+        <div class="profile-header">
+            <div class="avatar">{{ current_user.name[0]|upper }}</div>
+            <div>
+                <span class="eyebrow">Личный кабинет</span>
+                <h1 class="mb-1">{{ current_user.name }}</h1>
+                <p class="mb-0 text-muted">
+                    {{ current_user.email }}
+                    <span class="role-badge">{{ current_user.role_label }}</span>
+                </p>
+            </div>
+            {% if current_user.is_admin %}
+            <a class="btn btn-outline-brand ms-lg-auto" href="{{ url_for('admin.dashboard') }}">
+                <i class="bi bi-speedometer2 me-1"></i>Админ-панель
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section pt-4">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="panel">
+                    <h2 class="panel-title"><i class="bi bi-person-gear me-2"></i>Личные данные</h2>
+                    <form method="post" action="{{ url_for('booking.update_profile') }}" novalidate>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="mb-3">
+                            <label class="form-label" for="profileName">Имя</label>
+                            <input class="form-control" type="text" id="profileName" name="name"
+                                   value="{{ current_user.name }}" required minlength="2" maxlength="120">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="profileEmail">Электронная почта</label>
+                            <input class="form-control" type="email" id="profileEmail" name="email"
+                                   value="{{ current_user.email }}" required maxlength="255">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="profilePhone">Телефон</label>
+                            <input class="form-control" type="tel" id="profilePhone" name="phone"
+                                   value="{{ current_user.phone or '' }}" placeholder="+7 914 000-00-00" maxlength="30">
+                        </div>
+                        <button class="btn btn-brand w-100" type="submit">Сохранить изменения</button>
+                    </form>
+                </div>
+
+                <div class="panel mt-4">
+                    <h2 class="panel-title"><i class="bi bi-shield-lock me-2"></i>Смена пароля</h2>
+                    <form method="post" action="{{ url_for('booking.change_password') }}" novalidate>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="mb-3">
+                            <label class="form-label" for="currentPassword">Текущий пароль</label>
+                            <input class="form-control" type="password" id="currentPassword"
+                                   name="current_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="newPassword">Новый пароль</label>
+                            <input class="form-control" type="password" id="newPassword"
+                                   name="new_password" required minlength="8" placeholder="Минимум 8 символов">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="newPasswordConfirm">Повторите новый пароль</label>
+                            <input class="form-control" type="password" id="newPasswordConfirm"
+                                   name="new_password_confirm" required minlength="8">
+                        </div>
+                        <button class="btn btn-outline-brand w-100" type="submit">Изменить пароль</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="panel">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <h2 class="panel-title mb-0"><i class="bi bi-journal-check me-2"></i>Мои бронирования</h2>
+                        <a class="btn btn-sm btn-outline-brand" href="{{ url_for('main.catalog') }}">
+                            <i class="bi bi-plus-lg me-1"></i>Новое бронирование
+                        </a>
+                    </div>
+
+                    {% if bookings %}
+                    <div class="booking-list">
+                        {% for booking in bookings %}
+                        <article class="booking-history-item">
+                            <a class="booking-thumb"
+                               href="{{ url_for('main.accommodation', accommodation_id=booking.accommodation.id) }}">
+                                <img src="{{ booking.accommodation.cover_url }}"
+                                     alt="{{ booking.accommodation.name }}">
+                            </a>
+                            <div class="booking-history-body">
+                                <div class="d-flex flex-wrap justify-content-between gap-2">
+                                    <div>
+                                        <h3>
+                                            <a href="{{ url_for('main.accommodation', accommodation_id=booking.accommodation.id) }}">
+                                                {{ booking.accommodation.name }}
+                                            </a>
+                                        </h3>
+                                        <p class="location-line mb-2">
+                                            <i class="bi bi-geo-alt"></i>{{ booking.accommodation.location }}
+                                        </p>
+                                    </div>
+                                    <span class="status-badge status-{{ booking.status }}">
+                                        {{ booking.status_label }}
+                                    </span>
+                                </div>
+                                <div class="booking-meta">
+                                    <span><i class="bi bi-calendar-check"></i>
+                                        {{ booking.check_in|date_ru }} — {{ booking.check_out|date_ru }}</span>
+                                    <span><i class="bi bi-moon-stars"></i>
+                                        {{ booking.nights }} {{ booking.nights|plural_ru('ночь', 'ночи', 'ночей') }}</span>
+                                    <span><i class="bi bi-wallet2"></i>
+                                        {{ booking.total_price|rub }}</span>
+                                </div>
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+                                    <span class="request-date">Заявка №{{ booking.id }} от
+                                        {{ booking.created_at.strftime('%d.%m.%Y') }}</span>
+                                    {% if booking.is_cancellable %}
+                                    <form method="post"
+                                          action="{{ url_for('booking.cancel_booking', booking_id=booking.id) }}"
+                                          data-confirm="Отменить бронирование №{{ booking.id }}?">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button class="btn btn-sm btn-outline-danger" type="submit">
+                                            Отменить бронирование
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state empty-state-small">
+                        <i class="bi bi-suitcase"></i>
+                        <h3>Пока нет бронирований</h3>
+                        <p>Выберите объект в каталоге — и ваша первая поездка начнётся здесь.</p>
+                        <a class="btn btn-brand" href="{{ url_for('main.catalog') }}">Перейти в каталог</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

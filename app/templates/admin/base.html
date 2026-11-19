@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="admin-header">
+    <div class="container">
+        <div class="admin-title-row">
+            <div>
+                <span class="eyebrow">Панель управления</span>
+                <h1>{% block admin_title %}Администрирование{% endblock %}</h1>
+                <p class="admin-subtitle">{% block admin_subtitle %}{% endblock %}</p>
+            </div>
+            <div class="admin-actions">{% block admin_actions %}{% endblock %}</div>
+        </div>
+        {% include "admin/_nav.html" %}
+    </div>
+</section>
+
+<section class="section pt-4">
+    <div class="container">
+        {% block admin_content %}{% endblock %}
+    </div>
+</section>
+{% endblock %}

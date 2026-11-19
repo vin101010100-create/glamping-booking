@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Кемпинг «Синские столбы»">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bde0dc"/>
+      <stop offset="100%" stop-color="#f7ecd5"/>
+    </linearGradient>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#205149"/>
+      <stop offset="100%" stop-color="#103b35"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#081f17" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#081f17" stop-opacity="0.82"/>
+    </linearGradient>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  
+  <circle cx="910" cy="180" r="74" fill="#f0b65c" opacity="0.92"/>
+  <circle cx="910" cy="180" r="118" fill="#f0b65c" opacity="0.14"/>
+  
+  <path d="M0 600 L170 330 L340 520 L500 300 L690 600 Z" fill="#76a097" opacity="0.55"/>
+  <path d="M390 610 L620 330 L790 520 L980 350 L1200 610 L1200 800 L390 800 Z" fill="#42786f" opacity="0.75"/>
+  <rect y="500" width="1200" height="140" fill="url(#haze)"/>
+  <path d="M0 620 C210 575 380 645 600 615 C820 585 1030 640 1200 600 L1200 800 L0 800 Z" fill="url(#ground)"/>
+  <g transform="translate(70 470) scale(0.8)" fill="#103b35" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(150 500) scale(0.6)" fill="#205149" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(250 520) scale(0.5)" fill="#42786f" opacity="0.85"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(1040 490) scale(0.7)" fill="#103b35" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(1120 520) scale(0.55)" fill="#205149" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(960 535) scale(0.45)" fill="#42786f" opacity="0.8"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g>
+  <g transform="translate(770 455) scale(0.85)"><path d="M0 120 L70 0 L140 120 Z" fill="#f3e6cc"/><path d="M70 0 L140 120 L95 120 Z" fill="#d8c19c"/><path d="M53 120 L70 68 L87 120 Z" fill="#2d3b31"/><path d="M0 120 L70 0" stroke="#816f52" stroke-width="3"/></g><g transform="translate(920 500) scale(0.6)"><path d="M0 120 L70 0 L140 120 Z" fill="#e9d9bb"/><path d="M70 0 L140 120 L95 120 Z" fill="#c8ae86"/><path d="M53 120 L70 70 L87 120 Z" fill="#2d3b31"/></g>
+  <rect y="540" width="1200" height="260" fill="url(#fade)"/>
+  <rect x="64" y="634" width="52" height="4" rx="2" fill="#f0b65c" opacity="0.9"/>
+  <text x="64" y="700" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#ffffff" opacity="0.96">Кемпинг «Синские столбы»</text>
+  <text x="64" y="744" font-family="'Segoe UI', Arial, sans-serif" font-size="15" letter-spacing="3.2" fill="#ffffff" opacity="0.72">ВЕРХОЯНСКИЙ РАЙОН · РЕКА СИНЯЯ</text>
+</svg>

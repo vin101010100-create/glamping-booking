@@ -1,0 +1,131 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Панель администратора — Саха Глэмпинг{% endblock %}
+{% block admin_title %}Обзор сервиса{% endblock %}
+{% block admin_subtitle %}Ключевые показатели и последние заявки{% endblock %}
+{% block admin_actions %}
+<a class="btn btn-brand" href="{{ url_for('admin.new_accommodation') }}">
+    <i class="bi bi-plus-lg me-1"></i>Добавить объект
+</a>
+{% endblock %}
+
+{% block admin_content %}
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-icon"><i class="bi bi-people"></i></div>
+            <div>
+                <div class="stat-card-value">{{ stats.users }}</div>
+                <div class="stat-card-label">пользователей</div>
+                <div class="stat-card-note">{{ stats.clients }} клиентов</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-icon"><i class="bi bi-houses"></i></div>
+            <div>
+                <div class="stat-card-value">{{ stats.accommodations }}</div>
+                <div class="stat-card-label">объектов размещения</div>
+                <div class="stat-card-note">{{ stats.active_accommodations }} в каталоге</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-icon"><i class="bi bi-journal-check"></i></div>
+            <div>
+                <div class="stat-card-value">{{ stats.bookings }}</div>
+                <div class="stat-card-label">бронирований</div>
+                <div class="stat-card-note">за всё время</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card stat-card-accent">
+            <div class="stat-card-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <div class="stat-card-value">{{ stats.pending }}</div>
+                <div class="stat-card-label">ожидают подтверждения</div>
+                <div class="stat-card-note">требуют внимания</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="panel h-100">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="panel-title mb-0"><i class="bi bi-clock-history me-2"></i>Последние бронирования</h2>
+                <a class="reset-link" href="{{ url_for('admin.bookings') }}">Все бронирования</a>
+            </div>
+            {% if recent_bookings %}
+            <div class="table-responsive">
+                <table class="table admin-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Клиент</th>
+                            <th>Объект</th>
+                            <th>Даты</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in recent_bookings %}
+                        <tr>
+                            <td class="text-muted">#{{ booking.id }}</td>
+                            <td>
+                                <div class="fw-semibold">{{ booking.user.name }}</div>
+                                <div class="small text-muted">{{ booking.user.email }}</div>
+                            </td>
+                            <td>{{ booking.accommodation.name }}</td>
+                            <td class="small">{{ booking.check_in.strftime('%d.%m.%Y') }}<br>
+                                {{ booking.check_out.strftime('%d.%m.%Y') }}</td>
+                            <td>
+                                <span class="status-badge status-{{ booking.status }}">{{ booking.status_label }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state empty-state-small">
+                <i class="bi bi-journal"></i>
+                <p>Бронирований пока нет.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel h-100">
+            <h2 class="panel-title"><i class="bi bi-lightning-charge me-2"></i>Быстрые действия</h2>
+            <div class="quick-actions">
+                <a href="{{ url_for('admin.new_accommodation') }}">
+                    <i class="bi bi-plus-circle"></i>
+                    <span><strong>Новый объект</strong><small>Добавить глэмпинг или базу</small></span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="{{ url_for('admin.bookings', status='pending') }}">
+                    <i class="bi bi-hourglass-split"></i>
+                    <span><strong>Заявки в ожидании</strong><small>{{ stats.pending }} требуют решения</small></span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="{{ url_for('admin.users') }}">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span><strong>Пользователи</strong><small>Всего {{ stats.users }} аккаунтов</small></span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                <a href="{{ url_for('main.catalog') }}">
+                    <i class="bi bi-window"></i>
+                    <span><strong>Открыть каталог</strong><small>Посмотреть сайт глазами гостя</small></span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

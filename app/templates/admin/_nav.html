@@ -1,0 +1,21 @@
+<nav class="admin-nav" aria-label="Разделы панели управления">
+    <a class="admin-nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}"
+       href="{{ url_for('admin.dashboard') }}">
+        <i class="bi bi-speedometer2"></i>Обзор
+    </a>
+    <a class="admin-nav-link {% if request.endpoint and request.endpoint.startswith('admin.accommodations') or request.endpoint in ['admin.new_accommodation', 'admin.edit_accommodation'] %}active{% endif %}"
+       href="{{ url_for('admin.accommodations') }}">
+        <i class="bi bi-houses"></i>Объекты
+    </a>
+    <a class="admin-nav-link {% if request.endpoint and request.endpoint.startswith('admin.bookings') or request.endpoint == 'admin.update_booking_status' %}active{% endif %}"
+       href="{{ url_for('admin.bookings') }}">
+        <i class="bi bi-journal-check"></i>Бронирования
+    </a>
+    <a class="admin-nav-link {% if request.endpoint == 'admin.users' %}active{% endif %}"
+       href="{{ url_for('admin.users') }}">
+        <i class="bi bi-people"></i>Пользователи
+    </a>
+    <a class="admin-nav-link admin-nav-back ms-lg-auto" href="{{ url_for('main.index') }}">
+        На сайт <i class="bi bi-box-arrow-up-right"></i>
+    </a>
+</nav>

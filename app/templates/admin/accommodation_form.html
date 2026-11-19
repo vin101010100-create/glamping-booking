@@ -1,0 +1,133 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if acc %}Редактирование объекта{% else %}Новый объект{% endif %} — Саха Глэмпинг{% endblock %}
+{% block admin_title %}{% if acc %}Редактирование объекта{% else %}Новый объект размещения{% endif %}{% endblock %}
+{% block admin_subtitle %}{{ acc.name if acc else 'Заполните информацию — она появится в каталоге' }}{% endblock %}
+{% block admin_actions %}
+<a class="btn btn-outline-secondary" href="{{ url_for('admin.accommodations') }}">
+    <i class="bi bi-arrow-left me-1"></i>К списку
+</a>
+{% endblock %}
+
+{% block admin_content %}
+<form method="post" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="panel">
+                <h2 class="panel-title"><i class="bi bi-info-circle me-2"></i>Основная информация</h2>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label" for="accName">Название <span class="text-danger">*</span></label>
+                        <input class="form-control" type="text" id="accName" name="name"
+                               value="{{ data.name }}" required minlength="3" maxlength="200"
+                               placeholder="Например, «Глэмпинг „Ленские столбы“»">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accType">Тип объекта <span class="text-danger">*</span></label>
+                        <select class="form-select" id="accType" name="type" required>
+                            <option value="">Выберите тип</option>
+                            {% for type_name in ACCOMMODATION_TYPES %}
+                            <option value="{{ type_name }}" {% if data.type == type_name %}selected{% endif %}>
+                                {{ type_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accLocation">Местоположение <span class="text-danger">*</span></label>
+                        <input class="form-control" type="text" id="accLocation" name="location"
+                               value="{{ data.location }}" required maxlength="200"
+                               placeholder="Улус, район, ориентир">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accPrice">Стоимость за ночь, ₽ <span class="text-danger">*</span></label>
+                        <input class="form-control" type="number" id="accPrice" name="price"
+                               value="{{ data.price }}" min="1" step="100" required placeholder="8500">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accCapacity">Вместимость, гостей <span class="text-danger">*</span></label>
+                        <input class="form-control" type="number" id="accCapacity" name="capacity"
+                               value="{{ data.capacity }}" min="1" max="50" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="accDescription">Описание <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="accDescription" name="description" rows="6"
+                                  required minlength="20"
+                                  placeholder="Расскажите об атмосфере, расположении и особенностях места">{{ data.description }}</textarea>
+                        <div class="form-text">Минимум 20 символов. Видно на странице объекта.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="accAmenities">Удобства и услуги</label>
+                        <textarea class="form-control" id="accAmenities" name="amenities" rows="2"
+                                  placeholder="Баня, Wi-Fi, Завтрак, Парковка">{{ data.amenities }}</textarea>
+                        <div class="form-text">Перечислите через запятую — они отобразятся списком.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel mt-4">
+                <h2 class="panel-title"><i class="bi bi-images me-2"></i>Фотографии</h2>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="accImageFile">Загрузить главное фото</label>
+                        <input class="form-control" type="file" id="accImageFile" name="image_file"
+                               accept=".jpg,.jpeg,.png,.webp,.gif"
+                               data-image-input data-preview="#imagePreview">
+                        <div class="form-text">JPG, PNG, WEBP или GIF, до 8 МБ.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="accImage">Или ссылка на изображение</label>
+                        <input class="form-control" type="text" id="accImage" name="image"
+                               value="{{ data.image }}" maxlength="500"
+                               placeholder="https://… или images/acc-1.svg">
+                        <div class="form-text">Загрузка файла имеет приоритет над ссылкой.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="accGallery">Галерея</label>
+                        <textarea class="form-control" id="accGallery" name="gallery" rows="3"
+                                  placeholder="Одна ссылка на строку">{{ data.gallery }}</textarea>
+                        <div class="form-text">Ссылки на дополнительные фото — по одной на строку.
+                            Если оставить поле пустым, будет показано главное фото.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="panel">
+                <h2 class="panel-title"><i class="bi bi-image me-2"></i>Предпросмотр</h2>
+                <img id="imagePreview" class="form-image-preview"
+                     src="{{ acc.cover_url if acc else url_for('static', filename='images/placeholder.svg') }}"
+                     alt="Предпросмотр изображения">
+            </div>
+
+            <div class="panel mt-4">
+                <h2 class="panel-title"><i class="bi bi-gear me-2"></i>Публикация</h2>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="accActive"
+                           name="is_active" {% if data.is_active %}checked{% endif %}>
+                    <label class="form-check-label" for="accActive">
+                        Показывать в каталоге
+                    </label>
+                </div>
+                <p class="small text-muted">Скрытый объект недоступен гостям, но сохраняется
+                    в системе вместе с историей бронирований.</p>
+                <button class="btn btn-brand w-100" type="submit">
+                    <i class="bi bi-check2 me-1"></i>Сохранить объект
+                </button>
+                <a class="btn btn-outline-secondary w-100 mt-2"
+                   href="{{ url_for('admin.accommodations') }}">Отмена</a>
+                {% if acc %}
+                <hr>
+                <a class="btn btn-sm btn-outline-secondary w-100"
+                   href="{{ url_for('main.accommodation', accommodation_id=acc.id) }}"
+                   target="_blank" rel="noopener">
+                    <i class="bi bi-box-arrow-up-right me-1"></i>Посмотреть на сайте
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

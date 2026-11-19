@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Каталог глэмпингов и баз отдыха — Саха Глэмпинг{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Каталог</li>
+            </ol>
+        </nav>
+        <h1>Места отдыха в Якутии</h1>
+        <p class="mb-0">Глэмпинги, базы отдыха, эко-отели и усадьбы. Выберите даты —
+            покажем только свободные варианты.</p>
+    </div>
+</section>
+
+<section class="section pt-4">
+    <div class="container">
+        <form class="filter-card" method="get" action="{{ url_for('main.catalog') }}">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-4">
+                    <label class="form-label" for="catalogQuery">Поиск по названию</label>
+                    <input class="form-control" type="search" id="catalogQuery" name="q"
+                           placeholder="Ленские столбы, баня, Оймякон…"
+                           value="{{ request.args.get('q', '') }}">
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label" for="catalogLocation">Локация</label>
+                    <select class="form-select" id="catalogLocation" name="location">
+                        <option value="">Вся Якутия</option>
+                        {% for location in locations %}
+                        <option value="{{ location }}"
+                                {% if request.args.get('location') == location %}selected{% endif %}>
+                            {{ location }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label" for="catalogType">Тип объекта</label>
+                    <select class="form-select" id="catalogType" name="type">
+                        <option value="">Любой</option>
+                        {% for type_name in ACCOMMODATION_TYPES %}
+                        <option value="{{ type_name }}"
+                                {% if request.args.get('type') == type_name %}selected{% endif %}>
+                            {{ type_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <label class="form-label" for="catalogSort">Сортировка</label>
+                    <select class="form-select" id="catalogSort" name="sort">
+                        <option value="recommended" {% if request.args.get('sort', 'recommended') == 'recommended' %}selected{% endif %}>Рекомендуемые</option>
+                        <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Сначала дешевле</option>
+                        <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Сначала дороже</option>
+                        <option value="new" {% if request.args.get('sort') == 'new' %}selected{% endif %}>Новые</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label" for="catalogMinPrice">Цена от, ₽</label>
+                    <input class="form-control" type="number" min="0" step="100" id="catalogMinPrice"
+                           name="min_price" placeholder="0"
+                           value="{{ request.args.get('min_price', '') }}">
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label" for="catalogMaxPrice">Цена до, ₽</label>
+                    <input class="form-control" type="number" min="0" step="100" id="catalogMaxPrice"
+                           name="max_price" placeholder="20 000"
+                           value="{{ request.args.get('max_price', '') }}">
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label" for="catalogCheckIn">Заезд</label>
+                    <input class="form-control" type="date" id="catalogCheckIn" name="check_in"
+                           min="{{ today.isoformat() }}" value="{{ request.args.get('check_in', '') }}">
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label" for="catalogCheckOut">Выезд</label>
+                    <input class="form-control" type="date" id="catalogCheckOut" name="check_out"
+                           min="{{ today.isoformat() }}" value="{{ request.args.get('check_out', '') }}">
+                </div>
+                <div class="col-lg-2 d-flex gap-2">
+                    <button class="btn btn-brand flex-grow-1" type="submit">
+                        <i class="bi bi-funnel me-1"></i>Показать
+                    </button>
+                    <a class="btn btn-outline-secondary" href="{{ url_for('main.catalog') }}"
+                       title="Сбросить фильтры"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </div>
+            </div>
+        </form>
+
+        {% if date_error %}
+        <div class="alert alert-warning mt-3 mb-0">
+            <i class="bi bi-exclamation-triangle me-2"></i>{{ date_error }}
+        </div>
+        {% endif %}
+
+        <div class="results-header">
+            <p class="mb-0">
+                Найдено объектов: <strong>{{ pagination.total }}</strong>
+                {% if request.args.get('check_in') and request.args.get('check_out') and not date_error %}
+                <span class="text-muted">· свободны на выбранные даты</span>
+                {% endif %}
+            </p>
+            {% if request.args %}
+            <a class="reset-link" href="{{ url_for('main.catalog') }}">Сбросить фильтры</a>
+            {% endif %}
+        </div>
+
+        {% if accommodations %}
+        <div class="row g-4">
+            {% for acc in accommodations %}
+            <div class="col-md-6 col-lg-4">
+                {% include "_accommodation_card.html" %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% include "_pagination.html" %}
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-search"></i>
+            <h3>Ничего не нашлось</h3>
+            <p>Попробуйте изменить даты, поднять максимальную цену или выбрать другую локацию.</p>
+            <a class="btn btn-brand" href="{{ url_for('main.catalog') }}">Сбросить фильтры</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

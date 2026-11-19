@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Саха Глэмпинг — бронирование глэмпингов и баз отдыха в Якутии{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-bg" style="background-image: url('{{ url_for('static', filename='images/hero.svg') }}');"></div>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="row">
+            <div class="col-lg-8">
+                <span class="hero-eyebrow"><i class="bi bi-compass me-2"></i>Республика Саха (Якутия)</span>
+                <h1 class="hero-title">Откройте Якутию.<br>Отдохните по-настоящему.</h1>
+                <p class="hero-subtitle">
+                    Глэмпинги у Ленских столбов, тёплые домики на берегу рек и северное сияние
+                    над головой. Выберите место и забронируйте отдых за пару минут.
+                </p>
+            </div>
+        </div>
+
+        <form class="search-panel" method="get" action="{{ url_for('main.catalog') }}">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-3 col-md-6">
+                    <label class="form-label" for="heroLocation"><i class="bi bi-geo-alt me-1"></i>Локация</label>
+                    <select class="form-select" id="heroLocation" name="location">
+                        <option value="">Вся Якутия</option>
+                        {% for location in locations %}
+                        <option value="{{ location }}">{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label" for="heroType"><i class="bi bi-house-door me-1"></i>Тип</label>
+                    <select class="form-select" id="heroType" name="type">
+                        <option value="">Любой</option>
+                        {% for type_name in ACCOMMODATION_TYPES %}
+                        <option value="{{ type_name }}">{{ type_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label" for="heroCheckIn"><i class="bi bi-calendar-check me-1"></i>Заезд</label>
+                    <input class="form-control" type="date" id="heroCheckIn" name="check_in"
+                           min="{{ today.isoformat() }}">
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label" for="heroCheckOut"><i class="bi bi-calendar-x me-1"></i>Выезд</label>
+                    <input class="form-control" type="date" id="heroCheckOut" name="check_out"
+                           min="{{ today.isoformat() }}">
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-brand btn-lg w-100" type="submit">
+                        <i class="bi bi-search me-2"></i>Найти место
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="stats-strip">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-4">
+                <div class="stat-value">{{ stats.accommodations }}</div>
+                <div class="stat-label">объектов размещения</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-value">{{ stats.locations }}</div>
+                <div class="stat-label">локаций в Якутии</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-value">{{ stats.bookings }}</div>
+                <div class="stat-label">бронирований оформлено</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row align-items-end mb-4">
+            <div class="col-md-8">
+                <span class="eyebrow">Выбор путешественников</span>
+                <h2 class="section-title">Популярные места отдыха</h2>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a class="btn btn-outline-brand" href="{{ url_for('main.catalog') }}">
+                    Весь каталог <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for acc in popular %}
+            <div class="col-md-6 col-lg-4">
+                {% include "_accommodation_card.html" %}
+            </div>
+            {% else %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-house-slash"></i>
+                    <p>Пока нет опубликованных объектов. Загляните позже.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="eyebrow">Почему мы</span>
+            <h2 class="section-title">Отдых на Севере без лишних забот</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon"><i class="bi bi-mountain"></i></div>
+                    <h3>Настоящая природа</h3>
+                    <p>Ленские и Синские столбы, незамерзающие источники, тайга и северное
+                        сияние — только проверенные места Якутии.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon"><i class="bi bi-calendar2-check"></i></div>
+                    <h3>Онлайн-бронирование</h3>
+                    <p>Выберите даты, отправьте заявку и следите за статусом брони
+                        в личном кабинете. Без звонков и переписок.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                    <h3>Прозрачные условия</h3>
+                    <p>Стоимость, удобства и правила отмены указаны заранее.
+                        Подтверждением брони занимается администратор объекта.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="eyebrow">Как это работает</span>
+            <h2 class="section-title">Три шага до отдыха</h2>
+        </div>
+        <div class="row g-4 steps-row">
+            <div class="col-md-4">
+                <div class="step-card">
+                    <span class="step-number">01</span>
+                    <h3>Найдите объект</h3>
+                    <p>Отфильтруйте глэмпинги по локации, типу, цене и свободным датам.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <span class="step-number">02</span>
+                    <h3>Выберите даты</h3>
+                    <p>Проверьте доступность периода и оформите заявку на бронирование.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <span class="step-number">03</span>
+                    <h3>Планируйте поездку</h3>
+                    <p>Дождитесь подтверждения администратора и собирайте чемоданы.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h2>Готовы к северному приключению?</h2>
+                    <p class="mb-0">Зарегистрируйтесь, чтобы бронировать места отдыха
+                        и управлять поездками в одном месте.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    {% if current_user.is_authenticated %}
+                    <a class="btn btn-light btn-lg" href="{{ url_for('main.catalog') }}">Выбрать объект</a>
+                    {% else %}
+                    <a class="btn btn-light btn-lg" href="{{ url_for('auth.register') }}">Создать аккаунт</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

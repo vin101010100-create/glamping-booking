@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена — Саха Глэмпинг{% endblock %}
+
+{% block content %}
+<section class="error-section">
+    <div class="container">
+        <div class="error-card">
+            <span class="error-code">404</span>
+            <h1>Страница не найдена</h1>
+            <p>Похоже, эта тропинка заросла. Возможно, ссылка устарела или объект
+                больше не доступен.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a class="btn btn-brand" href="{{ url_for('main.index') }}">На главную</a>
+                <a class="btn btn-outline-brand" href="{{ url_for('main.catalog') }}">В каталог</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

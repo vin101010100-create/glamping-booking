@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Глэмпинг «Оймякон»">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#273453"/>
+      <stop offset="100%" stop-color="#6f7296"/>
+    </linearGradient>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#182440"/>
+      <stop offset="100%" stop-color="#0d1628"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#081f17" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#081f17" stop-opacity="0.82"/>
+    </linearGradient>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <circle cx="140" cy="90" r="1.6" fill="#ffffff" opacity="0.75"/><circle cx="320" cy="60" r="2.2" fill="#ffffff" opacity="0.75"/><circle cx="510" cy="120" r="1.6" fill="#ffffff" opacity="0.75"/><circle cx="690" cy="70" r="2.2" fill="#ffffff" opacity="0.75"/><circle cx="880" cy="110" r="1.6" fill="#ffffff" opacity="0.75"/><circle cx="1080" cy="60" r="2.2" fill="#ffffff" opacity="0.75"/><circle cx="1120" cy="190" r="1.6" fill="#ffffff" opacity="0.75"/><circle cx="240" cy="200" r="2.2" fill="#ffffff" opacity="0.75"/>
+  <circle cx="910" cy="180" r="74" fill="#f4ecd9" opacity="0.92"/>
+  <circle cx="910" cy="180" r="118" fill="#f4ecd9" opacity="0.14"/>
+  <path d="M-50 220 C220 80 420 330 720 160 C950 -15 1130 170 1280 90" stroke="#7ee2b8" stroke-width="46" fill="none" opacity="0.22" filter="url(#blur)"/><path d="M-50 280 C250 130 500 360 800 190 C1000 75 1150 220 1280 150" stroke="#a8f0c8" stroke-width="20" fill="none" opacity="0.35" filter="url(#blur)"/>
+  <path d="M0 600 L170 330 L340 520 L500 300 L690 600 Z" fill="#4d5a7b" opacity="0.55"/>
+  <path d="M390 610 L620 330 L790 520 L980 350 L1200 610 L1200 800 L390 800 Z" fill="#2c3855" opacity="0.75"/>
+  <rect y="500" width="1200" height="140" fill="url(#haze)"/>
+  <path d="M0 620 C210 575 380 645 600 615 C820 585 1030 640 1200 600 L1200 800 L0 800 Z" fill="url(#ground)"/>
+  <g transform="translate(70 470) scale(0.8)" fill="#0d1628" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(150 500) scale(0.6)" fill="#182440" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(250 520) scale(0.5)" fill="#2c3855" opacity="0.85"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(1040 490) scale(0.7)" fill="#0d1628" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(1120 520) scale(0.55)" fill="#182440" opacity="0.9"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g><g transform="translate(960 535) scale(0.45)" fill="#2c3855" opacity="0.8"><path d="M0 0 L34 62 L10 62 L45 126 L-45 126 L-10 62 L-34 62 Z"/><rect x="-4" y="120" width="8" height="24" fill="#3a2d20"/></g>
+  <g transform="translate(770 455) scale(0.85)"><path d="M0 120 L70 0 L140 120 Z" fill="#f3e6cc"/><path d="M70 0 L140 120 L95 120 Z" fill="#d8c19c"/><path d="M53 120 L70 68 L87 120 Z" fill="#2d3b31"/><path d="M0 120 L70 0" stroke="#816f52" stroke-width="3"/></g><g transform="translate(920 500) scale(0.6)"><path d="M0 120 L70 0 L140 120 Z" fill="#e9d9bb"/><path d="M70 0 L140 120 L95 120 Z" fill="#c8ae86"/><path d="M53 120 L70 70 L87 120 Z" fill="#2d3b31"/></g>
+  <rect y="540" width="1200" height="260" fill="url(#fade)"/>
+  <rect x="64" y="634" width="52" height="4" rx="2" fill="#f4ecd9" opacity="0.9"/>
+  <text x="64" y="700" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#ffffff" opacity="0.96">Глэмпинг «Оймякон»</text>
+  <text x="64" y="744" font-family="'Segoe UI', Arial, sans-serif" font-size="15" letter-spacing="3.2" fill="#ffffff" opacity="0.72">ОЙМЯКОНСКИЙ УЛУС · ОЙМЯКОН</text>
+</svg>
